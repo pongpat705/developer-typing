@@ -1,0 +1,8 @@
+com/example/speedtyping/models/ScoreSubmission.class
+com/example/speedtyping/DatabaseVerticle.class
+com/example/speedtyping/MainVerticle.class
+com/example/speedtyping/codecs/ScoreSubmissionCodec.class
+com/example/speedtyping/codecs/LeaderboardRequestCodec.class
+com/example/speedtyping/models/LeaderboardRequest.class
+com/example/speedtyping/FileLoaderVerticle.class
+com/example/speedtyping/ApiVerticle.class

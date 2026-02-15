@@ -1,0 +1,9 @@
+node_modules/
+target/
+rocksdb_data/
+rocksdb_backup/
+.DS_Store
+dist/
+frontend/dist/
+frontend/node_modules/
+backend/target/

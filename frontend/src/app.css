@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+}
+
+h1, h2, h3 {
+  color: #61dafb;
+}
+
+button {
+  background-color: #0e639c;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+button:hover {
+  background-color: #1177bb;
+}
+
+input {
+  background-color: #3c3c3c;
+  color: #d4d4d4;
+  border: 1px solid #555;
+  padding: 8px;
+  font-family: inherit;
+}

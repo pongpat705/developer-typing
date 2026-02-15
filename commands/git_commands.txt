@@ -1,0 +1,10 @@
+git init
+git clone https://github.com/example/repo.git
+git add .
+git commit -m "initial commit"
+git push origin main
+git pull
+git status
+git log
+git checkout -b feature/new-feature
+git merge feature/new-feature

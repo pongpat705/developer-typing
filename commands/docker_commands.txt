@@ -1,0 +1,10 @@
+docker ps
+docker images
+docker run hello-world
+docker-compose up -d
+docker build -t my-app .
+docker logs my-container
+docker stop my-container
+docker rm my-container
+docker rmi my-image
+docker exec -it my-container bash

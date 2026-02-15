@@ -1,0 +1,8 @@
+/app/backend/src/main/java/com/example/speedtyping/ApiVerticle.java
+/app/backend/src/main/java/com/example/speedtyping/DatabaseVerticle.java
+/app/backend/src/main/java/com/example/speedtyping/FileLoaderVerticle.java
+/app/backend/src/main/java/com/example/speedtyping/MainVerticle.java
+/app/backend/src/main/java/com/example/speedtyping/codecs/LeaderboardRequestCodec.java
+/app/backend/src/main/java/com/example/speedtyping/codecs/ScoreSubmissionCodec.java
+/app/backend/src/main/java/com/example/speedtyping/models/LeaderboardRequest.java
+/app/backend/src/main/java/com/example/speedtyping/models/ScoreSubmission.java
