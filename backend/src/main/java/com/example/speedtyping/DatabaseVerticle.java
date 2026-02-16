@@ -19,8 +19,8 @@ public class DatabaseVerticle extends AbstractVerticle {
 
   private RocksDB db;
   private BackupEngine backupEngine;
-  private final String DB_PATH = "rocksdb_data";
-  private final String BACKUP_PATH = "rocksdb_backup";
+  private final String DB_PATH = System.getenv().getOrDefault("DB_PATH", "rocksdb_data");
+  private final String BACKUP_PATH = System.getenv().getOrDefault("BACKUP_PATH", "rocksdb_backup");
   private final ObjectMapper mapper = new ObjectMapper();
 
   // In-memory buffer for leaderboard (Sequenced Collection)
