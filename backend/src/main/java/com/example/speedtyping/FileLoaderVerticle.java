@@ -16,8 +16,7 @@ public class FileLoaderVerticle extends AbstractVerticle {
   public void start(Promise<Void> startPromise) {
     // Assuming virtual thread deployment, so we can block here
     try {
-      String commandsPath = System.getenv().getOrDefault("COMMANDS_PATH", "commands");
-      Path commandsDir = Paths.get(commandsPath);
+      Path commandsDir = Paths.get("commands");
       if (Files.exists(commandsDir) && Files.isDirectory(commandsDir)) {
           try (DirectoryStream<Path> stream = Files.newDirectoryStream(commandsDir, "*.txt")) {
               for (Path file : stream) {

@@ -28,21 +28,11 @@ public class ApiVerticle extends AbstractVerticle {
     router.post("/api/score").handler(this::submitScore);
     router.get("/api/leaderboard").handler(this::getLeaderboard);
 
-    int port = 8080;
-    try {
-        String httpPort = System.getenv("HTTP_PORT");
-        if (httpPort != null) {
-            port = Integer.parseInt(httpPort);
-        }
-    } catch (NumberFormatException e) {
-        System.out.println("Invalid HTTP_PORT environment variable, using default 8080");
-    }
-
     vertx.createHttpServer()
       .requestHandler(router)
-      .listen(port)
+      .listen(8080)
       .onSuccess(server -> {
-        System.out.println("HTTP server started on port " + server.actualPort());
+        System.out.println("HTTP server started on port 8080");
         startPromise.complete();
       })
       .onFailure(startPromise::fail);
