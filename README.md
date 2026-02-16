@@ -70,6 +70,20 @@ npm run dev
 ```
 Access the game at `http://localhost:5173`.
 
+## 🔧 Configuration & Environment Variables
+
+Currently, the application uses default configuration values. No environment variables are required to run the project locally.
+
+| Component | Setting | Default Value | Description |
+| :--- | :--- | :--- | :--- |
+| **Backend** | Port | `8080` | HTTP Server Port |
+| **Backend** | Database Path | `./rocksdb_data` | Directory for RocksDB storage |
+| **Backend** | Backup Path | `./rocksdb_backup` | Directory for RocksDB backups |
+| **Backend** | Commands Path | `./commands` | Directory for command text files |
+| **Frontend** | API URL | `http://localhost:8080` | URL of the backend API (Hardcoded in components) |
+
+To customize these values, you would currently need to modify the source code in `ApiVerticle.java`, `DatabaseVerticle.java`, `FileLoaderVerticle.java`, and the Svelte components.
+
 ## 🧠 Key Implementation Details
 
 ### Vert.x EventBus & Codecs
