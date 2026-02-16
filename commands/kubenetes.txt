@@ -1,0 +1,30 @@
+kubectl get pods
+kubectl get nodes
+kubectl get deployments
+kubectl get services
+kubectl get namespaces
+kubectl describe pod pod_name
+kubectl describe node node_name
+kubectl logs pod_name
+kubectl logs -f pod_name
+kubectl apply -f manifest.yaml
+kubectl delete -f manifest.yaml
+kubectl delete pod pod_name
+kubectl exec -it pod_name -- /bin/bash
+kubectl port-forward pod_name 8080:80
+kubectl scale deployment deployment_name --replicas=3
+kubectl get events --sort-by='.lastTimestamp'
+kubectl cluster-info
+kubectl config view
+kubectl config current-context
+kubectl config use-context context_name
+kubectl top pod
+kubectl top node
+kubectl create namespace namespace_name
+kubectl get all -A
+kubectl rollout status deployment/deployment_name
+kubectl rollout undo deployment/deployment_name
+kubectl explain pods
+kubectl label pods pod_name disk=ssd
+kubectl annotate pods pod_name description='my description'
+kubectl auth can-i create deployments

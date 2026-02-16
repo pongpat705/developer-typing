@@ -1,10 +1,46 @@
 git init
 git clone https://github.com/example/repo.git
 git add .
+git add [file]
 git commit -m "initial commit"
+git commit --amend -m "new message"
 git push origin main
+git push origin --delete [branch]
 git pull
+git fetch
 git status
 git log
+git log --oneline --graph --all
+git show [commit]
 git checkout -b feature/new-feature
+git checkout [branch]
+git checkout [commit]
+git checkout -- [file]
+git branch
+git branch -a
+git branch -d [branch]
+git branch -D [branch]
 git merge feature/new-feature
+git rebase main
+git cherry-pick [commit]
+git diff
+git diff --staged
+git stash
+git stash pop
+git stash list
+git stash apply
+git reset --soft HEAD~1
+git reset --hard HEAD~1
+git reset [file]
+git revert [commit]
+git remote -v
+git remote add origin [url]
+git remote set-url origin [url]
+git tag
+git tag -a v1.0 -m "version 1.0"
+git config --global user.name "Your Name"
+git config --global user.email "mail@example.com"
+git config --list
+git rm [file]
+git mv [old_file] [new_file]
+git clean -fd

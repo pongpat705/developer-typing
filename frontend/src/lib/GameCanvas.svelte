@@ -1,5 +1,6 @@
 <script>
     import { onMount } from "svelte";
+    import { fly } from "svelte/transition";
 
     let { combo = $bindable(0), maxCombo = $bindable(0) } = $props();
 
@@ -53,6 +54,12 @@
     }
 
     let lastCorrectLength = $state(0);
+    let isShaking = $state(false);
+
+    function triggerShake() {
+        isShaking = true;
+        setTimeout(() => (isShaking = false), 300);
+    }
 
     function handleInput(e) {
         const val = e.target.value;
@@ -81,6 +88,7 @@
         } else {
             // Wrong
             combo = 0;
+            triggerShake();
             // Don't reset lastCorrectLength completely?
             // Logic: if user typed "docka" instead of "docker", lastCorrectLength was 4.
             // Now it's wrong.
@@ -89,10 +97,11 @@
     }
 
     async function finishGame() {
+        const finalWpm = wpm;
         isPlaying = false;
         const score = {
             username: prompt("Enter your username:", "Guest") || "Guest",
-            wpm: wpm,
+            wpm: finalWpm,
             maxCombo: maxCombo,
         };
 
@@ -136,16 +145,32 @@
             <!-- Placeholder -->
         </div>
 
-        <div class="command-display">
-            {#each currentText.split("") as char, i}
-                <span
-                    class:correct={i < input.length && input[i] === char}
-                    class:wrong={i < input.length && input[i] !== char}
-                    class:pending={i >= input.length}
+        <div class="command-queue">
+            {#key currentCommandIndex}
+                <div
+                    class="queue-item next"
+                    in:fly={{ y: -20, duration: 300, delay: 50 }}
                 >
-                    {char}
-                </span>
-            {/each}
+                    {commands[currentCommandIndex + 1] || "..."}
+                </div>
+
+                <div
+                    class="queue-item current"
+                    in:fly={{ y: -20, duration: 300 }}
+                    out:fly={{ y: 20, duration: 300 }}
+                >
+                    {#each currentText.split("") as char, i}
+                        <span
+                            class:correct={i < input.length &&
+                                input[i] === char}
+                            class:wrong={i < input.length && input[i] !== char}
+                            class:pending={i >= input.length}
+                        >
+                            {char}
+                        </span>
+                    {/each}
+                </div>
+            {/key}
         </div>
 
         <input
@@ -154,6 +179,7 @@
             value={input}
             oninput={handleInput}
             class="input-box"
+            class:shake={isShaking}
         />
         <p class="hint">Type the command above!</p>
     {/if}
@@ -167,24 +193,57 @@
         background: #252526;
         padding: 2rem;
         border-radius: 8px;
-        min-height: 300px;
+        min-height: 400px; /* Increased height for vertical queue */
         justify-content: center;
+        overflow: hidden;
     }
-    .command-display {
-        font-size: 2rem;
+
+    .command-queue {
+        position: relative;
+        width: 100%;
+        height: 150px; /* Fixed height for the queue area */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         margin: 2rem 0;
-        font-family: "Fira Code", monospace;
-        letter-spacing: 2px;
     }
+
+    .queue-item {
+        font-family: "Fira Code", monospace;
+        text-align: center;
+        white-space: pre-wrap;
+        word-break: break-all;
+        max-width: 100%;
+    }
+
+    .queue-item.next {
+        position: absolute;
+        top: 10px;
+        font-size: 1.2rem;
+        color: #666;
+        opacity: 0.6;
+        /* Next item doesn't need detailed character spans, just text */
+    }
+
+    .queue-item.current {
+        font-size: 2rem;
+        letter-spacing: 2px;
+        z-index: 10;
+        margin-top: 2rem; /* Push down slightly to make room for next */
+    }
+
     .correct {
         color: #4caf50;
+        display: inline-block;
+        animation: pop 0.1s ease-out;
     }
     .wrong {
         color: #f44336;
         background: rgba(244, 67, 54, 0.2);
     }
     .pending {
-        color: #666;
+        color: #bbb; /* Lighter pending text */
     }
 
     .input-box {
@@ -196,7 +255,40 @@
         border-radius: 4px;
         background: #1e1e1e;
         color: white;
+        transition: border-color 0.2s;
+        z-index: 20;
     }
+
+    .shake {
+        animation: shake 0.3s;
+        border-color: #f44336;
+    }
+
+    @keyframes shake {
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+        25% {
+            transform: translateX(-5px);
+        }
+        75% {
+            transform: translateX(5px);
+        }
+    }
+
+    @keyframes pop {
+        0% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.3);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+
     .stats {
         display: flex;
         gap: 2rem;

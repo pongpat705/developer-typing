@@ -1,0 +1,55 @@
+ls
+ls -la
+pwd
+cd ..
+cd ~
+mkdir my_directory
+touch file.txt
+cp source.txt destination.txt
+cp -r source_dir destination_dir
+mv old_name.txt new_name.txt
+rm file.txt
+rm -rf directory_name
+cat file.txt
+less file.txt
+head -n 10 file.txt
+tail -n 10 file.txt
+tail -f logfile.log
+grep "search_term" file.txt
+grep -r "search_term" .
+find . -name "*.txt"
+top
+htop
+df -h
+du -sh *
+free -m
+uname -a
+uptime
+ps aux
+kill -9 1234
+chmod +x script.sh
+chmod 755 file.txt
+chmod 600 private_key
+chown user:group file.txt
+sudo command_here
+ip addr
+ping https://www.google.com/search?q=google.com
+curl -I https://https://www.google.com/search?q=google.com
+wget https://www.google.com/search?q=https://example.com/file.zip
+ssh user@remote_host
+scp file.txt user@remote_host:/path/
+netstat -tuln
+sudo apt update
+sudo apt upgrade
+sudo apt install package_name
+sudo apt remove package_name
+tar -cvf archive.tar folder/
+tar -xvf archive.tar
+tar -czvf archive.tar.gz folder/
+tar -xzvf archive.tar.gz
+zip -r archive.zip folder/
+unzip archive.zip
+history
+alias ll='ls -la'
+export PATH=$PATH:/new/path
+exit

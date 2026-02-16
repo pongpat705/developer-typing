@@ -1,0 +1,32 @@
+ip addr show
+ip route show
+ip link set eth0 up
+ip link set eth0 down
+ping -c 4 https://www.google.com/search?q=google.com
+traceroute https://www.google.com/search?q=google.com
+mtr https://www.google.com/search?q=google.com
+dig example.com
+nslookup example.com
+host example.com
+netstat -tuln
+netstat -rn
+ss -tuln
+ss -s
+nmcli device status
+nmcli connection show
+iwconfig
+curl -I https://https://www.google.com/search?q=google.com
+wget --spider https://https://www.google.com/search?q=google.com
+nc -zv 127.0.0.1 22-80
+telnet 127.0.0.1 80
+nmap -sP 192.168.1.0/24
+nmap -sV localhost
+tcpdump -i eth0
+tcpdump -i eth0 port 80
+wireshark
+ifconfig
+route -n
+arp -a
+ethtool eth0
+iptables -L -n -v
+ufw status

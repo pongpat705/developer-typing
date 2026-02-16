@@ -1,0 +1,32 @@
+vi file.txt
+vim file.txt
+nano file.txt
+emacs -nw file.txt
+micro file.txt
+jq '.' file.json
+jq -r '.key' file.json
+jq -c '.' file.json
+yq eval '.key' file.yaml
+gron file.json
+gron --ungron file.txt
+fx file.json
+tidy -xml -iq file.xml
+sed 's/find/replace/g' file.txt
+awk '{print $1}' file.txt
+grep -oP '(?<=prefix).*(?=suffix)' file.txt
+tr '[:lower:]' '[:upper:]' < file.txt
+base64 file.txt
+base64 -d file.txt
+echo -n "string" | base64
+echo -n "string" | sha256sum
+echo -n "string" | md5sum
+openssl base64 -d <<< "ZGF0YQ=="
+urlencode "string"
+urldecode "string%20data"
+iconv -f UTF-8 -t ISO-8859-1 file.txt
+dos2unix file.txt
+unix2dos file.txt
+recode ../latin1..utf8 file.txt
+shasum -a 256 file.txt
+gpg -c file.txt
+gpg -d file.txt.gpg
