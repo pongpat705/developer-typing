@@ -11,6 +11,11 @@
     let startTime = $state(0);
     let isPlaying = $state(false);
 
+    // Session State
+    let sessionId = $state("");
+    let username = $state("Guest");
+    let typedHistory = $state([]); // Stores completed commands
+
     // Time tracking for WPM
     let now = $state(Date.now());
 
@@ -29,28 +34,53 @@
         timeElapsed > 0 ? Math.round(charsTyped / 5 / timeElapsed) : 0,
     );
 
-    // Fetch commands
-    onMount(async () => {
-        try {
-            const res = await fetch(
-                "http://localhost:8080/api/commands?count=10",
-            );
-            commands = await res.json();
-        } catch (e) {
-            console.error("Failed to fetch commands", e);
-            commands = ["git status", "docker ps", "mvn clean install"];
-        }
-    });
+    async function startGame() {
+        username = prompt("Enter your username:", "Guest") || "Guest";
 
-    function startGame() {
-        isPlaying = true;
-        startTime = Date.now();
-        input = "";
-        combo = 0;
-        maxCombo = 0;
-        charsTyped = 0;
-        currentCommandIndex = 0;
-        // Focus logic can be handled via directive or effect
+        try {
+            const res = await fetch("http://localhost:8080/api/game/start", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ username })
+            });
+            const data = await res.json();
+
+            sessionId = data.sessionId;
+            commands = data.commands;
+            // data.signature is available but unused for now
+
+            isPlaying = true;
+            startTime = Date.now();
+            input = "";
+            combo = 0;
+            maxCombo = 0;
+            charsTyped = 0;
+            currentCommandIndex = 0;
+            typedHistory = [];
+
+            startHeartbeat();
+        } catch (e) {
+            console.error("Failed to start game", e);
+            alert("Failed to start game!");
+        }
+    }
+
+    let heartbeatInterval;
+
+    function startHeartbeat() {
+        if (heartbeatInterval) clearInterval(heartbeatInterval);
+        heartbeatInterval = setInterval(async () => {
+            if (!isPlaying) return;
+            try {
+                await fetch("http://localhost:8080/api/game/heartbeat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ sessionId, progress: charsTyped })
+                });
+            } catch (e) {
+                console.error("Heartbeat failed", e);
+            }
+        }, 2000);
     }
 
     let lastCorrectLength = $state(0);
@@ -77,6 +107,7 @@
 
             // Check completion
             if (val === currentText) {
+                typedHistory.push(val); // Add completed command
                 currentCommandIndex++;
                 input = "";
                 lastCorrectLength = 0;
@@ -89,40 +120,75 @@
             // Wrong
             combo = 0;
             triggerShake();
-            // Don't reset lastCorrectLength completely?
-            // Logic: if user typed "docka" instead of "docker", lastCorrectLength was 4.
-            // Now it's wrong.
         }
         input = val;
     }
 
+    async function generateSignature(data) {
+        const secret = "dev-secret"; // Hardcoded deterrent
+        const enc = new TextEncoder();
+        const key = await crypto.subtle.importKey(
+            "raw",
+            enc.encode(secret),
+            { name: "HMAC", hash: "SHA-256" },
+            false,
+            ["sign"]
+        );
+        const signature = await crypto.subtle.sign(
+            "HMAC",
+            key,
+            enc.encode(data)
+        );
+        return btoa(String.fromCharCode(...new Uint8Array(signature)));
+    }
+
     async function finishGame() {
-        const finalWpm = wpm;
         isPlaying = false;
+        clearInterval(heartbeatInterval);
+
+        // Construct full typed text
+        const fullTypedText = typedHistory.join("") + input;
+
+        // Sign payload
+        const payloadToSign = sessionId + fullTypedText;
+        let sig = "";
+        try {
+            sig = await generateSignature(payloadToSign);
+        } catch(e) {
+            console.error("Signing failed", e);
+        }
+
         const score = {
-            username: prompt("Enter your username:", "Guest") || "Guest",
-            wpm: finalWpm,
-            maxCombo: maxCombo,
+            sessionId,
+            username,
+            typedText: fullTypedText,
+            signature: sig
         };
 
         try {
-            await fetch("http://localhost:8080/api/score", {
+            const res = await fetch("http://localhost:8080/api/game/submit", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(score),
             });
-            // Refresh commands for next game
-            const res = await fetch(
-                "http://localhost:8080/api/commands?count=10",
-            );
-            commands = await res.json();
+
+            if (!res.ok) {
+                const errText = await res.text();
+                throw new Error(errText);
+            }
+
+            const result = await res.json();
+            alert(`Game Over! WPM: ${result.wpm}, Max Combo: ${result.maxCombo}`);
+
+            commands = [];
         } catch (e) {
             console.error(e);
+            alert("Failed to submit score: " + e.message);
         }
     }
 
     // Effect to handle focus
-    let inputEl;
+    let inputEl = $state();
     $effect(() => {
         if (isPlaying && inputEl) {
             inputEl.focus();
@@ -134,9 +200,6 @@
     {#if !isPlaying}
         <div class="start-screen">
             <button onclick={startGame}>Start Game</button>
-            {#if commands.length === 0}
-                <p>Loading commands...</p>
-            {/if}
         </div>
     {:else}
         <div class="stats">
