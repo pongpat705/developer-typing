@@ -194,9 +194,23 @@
             inputEl.focus();
         }
     });
+
+    let isDark = $state(false);
+
+    function toggleTheme() {
+        isDark = !isDark;
+        if (isDark) {
+            document.body.classList.add('dark-theme');
+        } else {
+            document.body.classList.remove('dark-theme');
+        }
+    }
 </script>
 
 <div class="game-container">
+    <button class="theme-toggle" onclick={toggleTheme}>
+        {isDark ? '☀️' : '🌙'}
+    </button>
     {#if !isPlaying}
         <div class="start-screen">
             <button onclick={startGame}>Start Game</button>
@@ -250,15 +264,39 @@
 
 <style>
     .game-container {
+        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
-        background: #252526;
+        background: var(--container-bg);
         padding: 2rem;
         border-radius: 8px;
         min-height: 400px; /* Increased height for vertical queue */
         justify-content: center;
         overflow: hidden;
+    }
+
+    .theme-toggle {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.2rem;
+        padding: 0.5rem;
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 100;
+    }
+
+    .theme-toggle:hover {
+        background: var(--input-bg);
     }
 
     .command-queue {
@@ -278,13 +316,14 @@
         white-space: pre-wrap;
         word-break: break-all;
         max-width: 100%;
+        color: var(--text-color);
     }
 
     .queue-item.next {
         position: absolute;
         top: 10px;
         font-size: 1.2rem;
-        color: #666;
+        color: var(--queue-next-color);
         opacity: 0.6;
         /* Next item doesn't need detailed character spans, just text */
     }
@@ -297,16 +336,16 @@
     }
 
     .correct {
-        color: #4caf50;
+        color: var(--success-color);
         display: inline-block;
         animation: pop 0.1s ease-out;
     }
     .wrong {
-        color: #f44336;
-        background: rgba(244, 67, 54, 0.2);
+        color: var(--error-color);
+        background: var(--error-bg);
     }
     .pending {
-        color: #bbb; /* Lighter pending text */
+        color: var(--pending-color); /* Lighter pending text */
     }
 
     .input-box {
@@ -314,17 +353,17 @@
         padding: 10px;
         width: 80%;
         text-align: center;
-        border: 2px solid #0e639c;
+        border: 2px solid var(--highlight-color);
         border-radius: 4px;
-        background: #1e1e1e;
-        color: white;
+        background: var(--input-bg);
+        color: var(--input-text);
         transition: border-color 0.2s;
         z-index: 20;
     }
 
     .shake {
         animation: shake 0.3s;
-        border-color: #f44336;
+        border-color: var(--error-color);
     }
 
     @keyframes shake {
@@ -356,7 +395,7 @@
         display: flex;
         gap: 2rem;
         font-size: 1.2rem;
-        color: #888;
+        color: var(--stats-color);
     }
     button {
         font-size: 1.5rem;
