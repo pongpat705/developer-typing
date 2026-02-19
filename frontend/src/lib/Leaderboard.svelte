@@ -49,13 +49,13 @@
 
 <style>
     .leaderboard {
-        background: #252526;
+        background: var(--container-bg);
         padding: 1rem;
         border-radius: 8px;
     }
     h2 {
         text-align: center;
-        color: #ffca28;
+        color: var(--gold-color);
     }
     table {
         width: 100%;
@@ -65,13 +65,13 @@
     th, td {
         padding: 0.5rem;
         text-align: left;
-        border-bottom: 1px solid #3c3c3c;
+        border-bottom: 1px solid var(--border-color);
     }
     th {
-        color: #888;
+        color: var(--muted-color);
     }
     .top3 {
-        color: #ffca28;
+        color: var(--gold-color);
         font-weight: bold;
     }
 </style>

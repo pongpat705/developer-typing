@@ -18,7 +18,7 @@
 <style>
     .combo-container {
         text-align: center;
-        background: #252526;
+        background: var(--container-bg);
         padding: 1rem;
         border-radius: 8px;
         min-height: 100px;
@@ -29,7 +29,7 @@
     .combo-text {
         font-size: 2rem;
         font-weight: bold;
-        color: #61dafb;
+        color: var(--highlight-color);
         transition: transform 0.1s;
     }
     .shake {
@@ -43,7 +43,7 @@
     .progress-bar {
         width: 100%;
         height: 10px;
-        background: #3c3c3c;
+        background: var(--input-bg);
         margin-top: 10px;
         border-radius: 5px;
         overflow: hidden;
